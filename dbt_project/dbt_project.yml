@@ -1,0 +1,29 @@
+name: metricflow_eval
+version: '1.0.0'
+config-version: 2
+
+profile: metricflow_eval
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  metricflow_eval:
+    staging:
+      +schema: analytics
+      +materialized: view
+    marts:
+      +schema: analytics
+      +materialized: table
+    metrics:
+      +schema: analytics
+      +materialized: table
+
+seeds:
+  metricflow_eval:
+    +schema: raw

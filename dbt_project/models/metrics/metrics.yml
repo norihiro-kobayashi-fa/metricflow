@@ -1,0 +1,103 @@
+version: 2
+
+metrics:
+  # ────────────────────────────────────────────
+  # 売上メトリクス
+  # ────────────────────────────────────────────
+  - name: revenue
+    label: "売上合計"
+    description: "期間内の注文金額の合計"
+    type: simple
+    type_params:
+      measure: order_total
+
+  - name: order_count
+    label: "注文件数"
+    description: "期間内の注文総数"
+    type: simple
+    type_params:
+      measure: order_count
+
+  - name: average_order_value
+    label: "平均注文金額"
+    description: "1注文あたりの平均金額"
+    type: simple
+    type_params:
+      measure: avg_order_value
+
+  - name: completed_orders
+    label: "完了注文件数"
+    description: "完了ステータスの注文数"
+    type: simple
+    type_params:
+      measure: completed_order_count
+
+  - name: completion_rate
+    label: "注文完了率"
+    description: "全注文に対する完了注文の割合"
+    type: ratio
+    type_params:
+      numerator: completed_orders
+      denominator: order_count
+
+  # ────────────────────────────────────────────
+  # 顧客メトリクス
+  # ────────────────────────────────────────────
+  - name: total_customers
+    label: "顧客総数"
+    description: "登録顧客の総数"
+    type: simple
+    type_params:
+      measure: customer_count
+
+  - name: active_customers
+    label: "アクティブ顧客数"
+    description: "1件以上注文した顧客数"
+    type: simple
+    type_params:
+      measure: active_customer_count
+
+  - name: customer_activation_rate
+    label: "顧客活性化率"
+    description: "全顧客に対するアクティブ顧客の割合"
+    type: ratio
+    type_params:
+      numerator: active_customers
+      denominator: total_customers
+
+  - name: average_customer_ltv
+    label: "平均顧客生涯価値"
+    description: "顧客1人あたりの平均生涯価値"
+    type: simple
+    type_params:
+      measure: avg_lifetime_value
+
+  # ────────────────────────────────────────────
+  # 累積メトリクス
+  # ────────────────────────────────────────────
+  - name: cumulative_revenue
+    label: "累積売上"
+    description: "全期間の累積売上金額"
+    type: cumulative
+    type_params:
+      measure: order_total
+
+  - name: cumulative_customers
+    label: "累積顧客数"
+    description: "全期間の累積顧客登録数"
+    type: cumulative
+    type_params:
+      measure: customer_count
+
+  # ────────────────────────────────────────────
+  # 派生メトリクス (derived)
+  # ────────────────────────────────────────────
+  - name: revenue_per_customer
+    label: "顧客1人あたり売上"
+    description: "売上合計 ÷ アクティブ顧客数"
+    type: derived
+    type_params:
+      expr: revenue / active_customers
+      metrics:
+        - name: revenue
+        - name: active_customers

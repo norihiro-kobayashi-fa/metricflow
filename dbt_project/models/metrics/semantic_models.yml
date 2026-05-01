@@ -1,0 +1,103 @@
+version: 2
+
+semantic_models:
+  # ────────────────────────────────────────────
+  # Orders セマンティックモデル
+  # ────────────────────────────────────────────
+  - name: orders
+    description: "注文データのセマンティックモデル"
+    model: ref('orders')
+
+    defaults:
+      agg_time_dimension: order_date
+
+    entities:
+      - name: order
+        type: primary
+        expr: order_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+
+    dimensions:
+      - name: order_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: order_status
+        type: categorical
+      - name: country
+        type: categorical
+      - name: payment_method
+        type: categorical
+      - name: is_completed
+        type: categorical
+
+    measures:
+      - name: order_total
+        description: "注文金額の合計"
+        agg: sum
+        expr: order_amount
+      - name: order_count
+        description: "注文件数"
+        agg: count_distinct
+        expr: order_id
+      - name: paid_total
+        description: "実際に支払われた金額の合計"
+        agg: sum
+        expr: total_paid
+      - name: avg_order_value
+        description: "平均注文金額"
+        agg: average
+        expr: order_amount
+      - name: completed_order_count
+        description: "完了した注文の件数"
+        agg: sum
+        expr: "case when is_completed then 1 else 0 end"
+
+  # ────────────────────────────────────────────
+  # Customers セマンティックモデル
+  # ────────────────────────────────────────────
+  - name: customers
+    description: "顧客データのセマンティックモデル"
+    model: ref('customers')
+
+    defaults:
+      agg_time_dimension: customer_created_at
+
+    entities:
+      - name: customer
+        type: primary
+        expr: customer_id
+
+    dimensions:
+      - name: customer_created_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: country
+        type: categorical
+      - name: is_active
+        type: categorical
+      - name: first_order_date
+        type: time
+        type_params:
+          time_granularity: day
+
+    measures:
+      - name: customer_count
+        description: "顧客数"
+        agg: count_distinct
+        expr: customer_id
+      - name: active_customer_count
+        description: "アクティブ顧客数"
+        agg: sum
+        expr: "case when is_active then 1 else 0 end"
+      - name: total_lifetime_value
+        description: "顧客生涯価値の合計"
+        agg: sum
+        expr: lifetime_value
+      - name: avg_lifetime_value
+        description: "平均顧客生涯価値"
+        agg: average
+        expr: lifetime_value

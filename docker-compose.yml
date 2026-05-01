@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: metricflow_postgres
+    environment:
+      POSTGRES_USER: dbt
+      POSTGRES_PASSWORD: dbt_password
+      POSTGRES_DB: dbt_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dbt -d dbt_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - metricflow_net
+
+  dbt:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.dbt
+    container_name: metricflow_dbt
+    environment:
+      DBT_PROFILES_DIR: /dbt_project
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: dbt
+      POSTGRES_PASSWORD: dbt_password
+      POSTGRES_DB: dbt_db
+      POSTGRES_SCHEMA: analytics
+    volumes:
+      - ./dbt_project:/dbt_project
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - metricflow_net
+    working_dir: /dbt_project
+    # コンテナを起動したままにする
+    command: tail -f /dev/null
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: metricflow_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./docker/pgadmin-servers.json:/pgadmin4/servers.json
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - metricflow_net
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  metricflow_net:
+    driver: bridge

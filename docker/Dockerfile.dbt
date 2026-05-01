@@ -1,0 +1,18 @@
+FROM python:3.12-slim
+
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# dbt-core, dbt-postgres, MetricFlow (dbt 1.8以降はdbt-metricsに内包)
+RUN pip install --no-cache-dir \
+    dbt-core==1.11.* \
+    dbt-postgres==1.10.* \
+    dbt-metricflow==0.12.*
+
+WORKDIR /dbt_project
+
+# dbt が利用可能か確認
+RUN dbt --version && mf --version

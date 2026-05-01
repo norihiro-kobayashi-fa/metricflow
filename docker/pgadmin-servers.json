@@ -1,0 +1,15 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "MetricFlow PostgreSQL",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "dbt_db",
+      "Username": "dbt",
+      "Password": "dbt_password",
+      "SSLMode": "prefer",
+      "SavePassword": true
+    }
+  }
+}

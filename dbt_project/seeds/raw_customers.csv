@@ -1,0 +1,16 @@
+id,first_name,last_name,email,created_at,country
+1,Michael,P.,michael@example.com,2023-01-10,US
+2,Shawn,M.,shawn@example.com,2023-01-15,US
+3,Kathleen,P.,kathleen@example.com,2023-01-20,JP
+4,Jimmy,C.,jimmy@example.com,2023-02-01,JP
+5,Katherine,R.,katherine@example.com,2023-02-10,GB
+6,Sarah,R.,sarah@example.com,2023-02-15,US
+7,Martin,M.,martin@example.com,2023-03-01,DE
+8,Frank,R.,frank@example.com,2023-03-10,US
+9,Jennifer,F.,jennifer@example.com,2023-03-20,JP
+10,Henry,W.,henry@example.com,2023-04-01,GB
+11,Tina,A.,tina@example.com,2023-04-10,US
+12,Paula,C.,paula@example.com,2023-04-20,DE
+13,Stacy,S.,stacy@example.com,2023-05-01,US
+14,Trevor,P.,trevor@example.com,2023-05-10,JP
+15,Frank,B.,frankb@example.com,2023-05-20,US

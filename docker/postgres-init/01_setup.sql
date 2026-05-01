@@ -1,0 +1,6 @@
+-- MetricFlow評価用スキーマ作成
+CREATE SCHEMA IF NOT EXISTS analytics;
+CREATE SCHEMA IF NOT EXISTS raw;
+
+GRANT ALL ON SCHEMA analytics TO dbt;
+GRANT ALL ON SCHEMA raw TO dbt;

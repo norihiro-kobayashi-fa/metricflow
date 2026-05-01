@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "顧客ステージングモデル"
+    columns:
+      - name: customer_id
+        description: "顧客ID (主キー)"
+        tests:
+          - unique
+          - not_null
+      - name: email
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: "注文ステージングモデル"
+    columns:
+      - name: order_id
+        description: "注文ID (主キー)"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: order_status
+        tests:
+          - accepted_values:
+              values: ['completed', 'returned', 'return_pending', 'placed', 'shipped']
+
+  - name: stg_payments
+    description: "支払いステージングモデル"
+    columns:
+      - name: payment_id
+        description: "支払いID (主キー)"
+        tests:
+          - not_null
+      - name: payment_status
+        tests:
+          - accepted_values:
+              values: ['success', 'fail']
