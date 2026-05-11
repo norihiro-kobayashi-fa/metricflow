@@ -9,3 +9,4 @@ dbt_project/logs/
 # OS
 .DS_Store
 Thumbs.db
+*.crt

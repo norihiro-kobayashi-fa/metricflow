@@ -1,4 +1,19 @@
-FROM python:3.12-slim
+ARG PYTHON_IMAGE
+FROM ${PYTHON_IMAGE:-python:3.12-slim}
+
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+ARG NO_PROXY
+
+ENV http_proxy=${HTTP_PROXY} \
+    https_proxy=${HTTPS_PROXY} \
+    no_proxy=${NO_PROXY}
+
+COPY certs /tmp/certs
+RUN find /tmp/certs -type f -name "*.crt" -exec cp {} /usr/local/share/ca-certificates/ \; && \
+    if [ -n "$(ls /usr/local/share/ca-certificates/*.crt 2>/dev/null)" ]; then \
+        update-ca-certificates; \
+    fi
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -11,6 +26,9 @@ RUN pip install --no-cache-dir \
     dbt-core==1.11.* \
     dbt-postgres==1.10.* \
     dbt-metricflow==0.12.*
+
+RUN cat /tmp/certs/*.crt >> $(python -c "import certifi; print(certifi.where())") && \
+    rm -rf /tmp/certs
 
 WORKDIR /dbt_project
 

@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    image: ${POSTGRES_IMAGE:-postgres:16-alpine}
     container_name: metricflow_postgres
     environment:
       POSTGRES_USER: dbt
@@ -23,6 +23,12 @@ services:
     build:
       context: ./docker
       dockerfile: Dockerfile.dbt
+      args:
+        PYTHON_BASE_CONTAINER: ${PYTHON_IMAGE:-}
+        HTTP_PROXY: ${HTTP_PROXY:-}
+        HTTPS_PROXY: ${HTTPS_PROXY:-}
+        NO_PROXY: ${NO_PROXY:-}
+        CERT_FILE: ${CERT_FILE:-}
     container_name: metricflow_dbt
     environment:
       DBT_PROFILES_DIR: /dbt_project
@@ -44,7 +50,7 @@ services:
     command: tail -f /dev/null
 
   pgadmin:
-    image: dpage/pgadmin4:latest
+    image: ${PGADMIN_IMAGE:-dpage/pgadmin4:latest}
     container_name: metricflow_pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
