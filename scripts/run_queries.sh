@@ -29,14 +29,14 @@ echo ""
 echo "--- 国別・月次売上 ---"
 $DBT mf query \
   --metrics revenue,order_count \
-  --group-by metric_time__month,country \
-  --order metric_time__month,country
+  --group-by metric_time__month,order__country \
+  --order metric_time__month,order__country
 
 echo ""
 echo "--- 支払い方法別 売上・注文件数 ---"
 $DBT mf query \
   --metrics revenue,order_count,average_order_value \
-  --group-by payment_method
+  --group-by order__payment_method
 
 echo ""
 echo "--- 注文完了率 (completion_rate) ---"

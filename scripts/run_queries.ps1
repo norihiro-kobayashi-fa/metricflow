@@ -17,10 +17,10 @@ Write-Host " MetricFlow クエリ評価" -ForegroundColor Cyan
 Write-Host "================================================" -ForegroundColor Cyan
 
 function Invoke-Dbt {
-    param([string[]]$Args)
-    $cmd = "docker compose exec dbt " + ($Args -join ' ')
+    param([string[]]$CmdArgs)
+    $cmd = "docker compose exec dbt " + ($CmdArgs -join ' ')
     Write-Host "  $cmd" -ForegroundColor DarkGray
-    docker compose exec dbt @Args
+    docker compose exec dbt @CmdArgs
     if ($LASTEXITCODE -ne 0) {
         Write-Host "[WARN] コマンドが失敗しました (exit $LASTEXITCODE)" -ForegroundColor Yellow
     }
@@ -46,14 +46,14 @@ Write-Host ""
 Write-Host "--- 国別・月次売上 ---" -ForegroundColor White
 Invoke-Dbt 'mf', 'query', `
     '--metrics', 'revenue,order_count', `
-    '--group-by', 'metric_time__month,country', `
-    '--order', 'metric_time__month,country'
+    '--group-by', 'metric_time__month,order__country', `
+    '--order', 'metric_time__month,order__country'
 
 Write-Host ""
 Write-Host "--- 支払い方法別 売上・注文件数 ---" -ForegroundColor White
 Invoke-Dbt 'mf', 'query', `
     '--metrics', 'revenue,order_count,average_order_value', `
-    '--group-by', 'payment_method'
+    '--group-by', 'order__payment_method'
 
 Write-Host ""
 Write-Host "--- 注文完了率 (completion_rate) ---" -ForegroundColor White
