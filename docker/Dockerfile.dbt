@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip install --no-cache-dir \
     dbt-core==1.11.* \
     dbt-postgres==1.10.* \
-    dbt-metricflow==0.12.*
+    dbt-metricflow==0.13.*
 
 RUN cat /tmp/certs/*.crt >> $(python -c "import certifi; print(certifi.where())") && \
     rm -rf /tmp/certs

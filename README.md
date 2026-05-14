@@ -9,7 +9,7 @@ dbt MetricFlow の評価・学習用 Docker Compose 環境です。
 | PostgreSQL | 16 | データウェアハウス |
 | dbt-core | 1.11.x | データ変換・セマンティックレイヤー |
 | dbt-postgres | 1.10.x | PostgreSQL アダプター |
-| dbt-metricflow | 0.12.x | メトリクス定義・クエリエンジン |
+| dbt-metricflow | 0.13.x | メトリクス定義・クエリエンジン |
 | pgAdmin 4 | latest | DB 可視化 UI |
 
 ## ディレクトリ構造
