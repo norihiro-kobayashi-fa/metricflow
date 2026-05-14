@@ -25,12 +25,14 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('stg_customers')
-              field: customer_id
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
       - name: order_status
         tests:
           - accepted_values:
-              values: ['completed', 'returned', 'return_pending', 'placed', 'shipped']
+              arguments:
+                values: ['completed', 'returned', 'return_pending', 'placed', 'shipped']
 
   - name: stg_payments
     description: "支払いステージングモデル"
@@ -42,4 +44,5 @@ models:
       - name: payment_status
         tests:
           - accepted_values:
-              values: ['success', 'fail']
+              arguments:
+                values: ['success', 'fail']

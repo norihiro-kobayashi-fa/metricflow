@@ -20,9 +20,9 @@ models:
     marts:
       +schema: analytics
       +materialized: table
-    metrics:
-      +schema: analytics
-      +materialized: table
+#    metrics:
+#      +schema: analytics
+#      +materialized: table
 
 seeds:
   metricflow_eval:
